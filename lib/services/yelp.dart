@@ -25,7 +25,6 @@ class Yelp {
 
       return jsonData.map((json) => Restaurant.fromJson(json)).toList();
     } catch (error) {
-      debugPrint(error.toString());
       return Future.error(error);
     }
   }
@@ -38,7 +37,6 @@ class Yelp {
 
       return Restaurant.fromJson(jsonDecode(response.body));
     } catch (error) {
-      debugPrint(error.toString());
       return Future.error(error);
     }
   }

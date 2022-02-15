@@ -13,22 +13,26 @@ class LocationProvider extends ChangeNotifier {
   }
 
   setLocationGPS() async {
-    Position location = await LocationService.getPosition();
+    try {
+      Position location = await LocationService.getPosition();
 
-    _location = Location(
-        latitude: location.latitude,
-        longitude: location.longitude,
-        timestamp: DateTime.now());
+      _location = Location(
+          latitude: location.latitude,
+          longitude: location.longitude,
+          timestamp: DateTime.now());
 
-    notifyListeners();
+      notifyListeners();
+    } catch (error) {}
   }
 
   setLocationAddress(String address) async {
-    List<Location> locations =
-        await locationFromAddress(address, localeIdentifier: 'en_UK');
+    try {
+      List<Location> locations =
+          await locationFromAddress(address, localeIdentifier: 'en_UK');
 
-    _location = locations[0];
+      _location = locations[0];
 
-    notifyListeners();
+      notifyListeners();
+    } catch (error) {}
   }
 }
