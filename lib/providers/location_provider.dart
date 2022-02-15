@@ -6,13 +6,13 @@ import 'package:geocoding/geocoding.dart';
 class LocationProvider extends ChangeNotifier {
   Location? _location;
 
-  LocationProvider() {
-    useLocationFromGPS();
-  }
-
   get location => _location;
 
-  useLocationFromGPS() async {
+  LocationProvider() {
+    setLocationGPS();
+  }
+
+  setLocationGPS() async {
     Position location = await LocationService.getPosition();
 
     _location = Location(
@@ -23,7 +23,7 @@ class LocationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  useLocationFromAddress(String address) async {
+  setLocationAddress(String address) async {
     List<Location> locations =
         await locationFromAddress(address, localeIdentifier: 'en_UK');
 

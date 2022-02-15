@@ -1,63 +1,52 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_food_finder/models/restaurant.dart';
 import 'package:flutter_food_finder/services/yelp.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FavouritesProvider extends ChangeNotifier {
-  List<Restaurant> favourites = [];
+  final List<Restaurant> _favourites = [];
 
-  fetchFavourites() async {
+  List<Restaurant> get favourites => _favourites;
+
+  FavouritesProvider() {
+    getFavourites();
+  }
+
+  getFavourites() async {
     final prefs = await SharedPreferences.getInstance();
-
-    prefs.remove('favourites');
 
     // Retrieve id's of favourites
     List<String> ids = (prefs.getStringList('favourites') ?? []);
 
-    if (ids.isEmpty) {
-      return;
-    }
+    if (ids.isEmpty) return;
 
-    var requests = <Future>[];
+    List<Restaurant> restaurants =
+        await Future.wait(ids.map((id) => Yelp.getRestaurantById(id)));
 
-    for (var id in ids) {
-      requests.add(Yelp.getRestaurantById(id));
-    }
+    _favourites.addAll(restaurants);
 
-    try {
-      var data = await Future.wait(requests);
-
-      List<Restaurant> restaurants =
-          data.map((restaurant) => restaurant as Restaurant).toList();
-
-      favourites.addAll(restaurants);
-    } catch (error) {
-      log(error.toString());
-    }
+    notifyListeners();
   }
 
-  // Add id of favourite
-  add(Restaurant restaurant) async {
+  addFavourite(Restaurant restaurant) async {
     final prefs = await SharedPreferences.getInstance();
 
-    favourites.add(restaurant);
+    _favourites.add(restaurant);
 
     prefs.setStringList('favourites',
-        favourites.map((Restaurant restaurant) => restaurant.id).toList());
+        _favourites.map((Restaurant restaurant) => restaurant.id).toList());
 
     // Notify widgets to rebuild
     notifyListeners();
   }
 
-  // Remove favourite by id
-  remove(Restaurant restaurant) async {
+  removeFavourite(Restaurant restaurant) async {
     final prefs = await SharedPreferences.getInstance();
 
-    favourites.removeWhere((r) => r.id == restaurant.id);
+    _favourites.removeWhere((r) => r.id == restaurant.id);
 
     prefs.setStringList('favourites',
-        favourites.map((Restaurant restaurant) => restaurant.id).toList());
+        _favourites.map((Restaurant restaurant) => restaurant.id).toList());
 
     // Notify widgets to rebuild
     notifyListeners();

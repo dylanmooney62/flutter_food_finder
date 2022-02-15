@@ -6,20 +6,16 @@ import 'package:geocoding/geocoding.dart';
 class RestaurantProvider with ChangeNotifier {
   late List<Restaurant> _restaurants = [];
 
-  RestaurantProvider(Location? location) {
-    if (location == null) {
-    } else {
-      fetchRestaurants(location);
-    }
-  }
-
   List<Restaurant> get restaurants => _restaurants;
 
-  fetchRestaurants(Location location) async {
-    List<Restaurant> res =
-        await Yelp.searchRestaurants(location.latitude, location.longitude);
+  RestaurantProvider(Location? location) {
+    if (location == null) return;
 
-    _restaurants = res;
+    fetchRestaurants(location);
+  }
+
+  fetchRestaurants(Location location) async {
+    _restaurants = await Yelp.getRestaurants(location);
 
     notifyListeners();
   }

@@ -28,7 +28,9 @@ class Restaurant {
   }
 
   double getDistanceFrom(double lat, double lng) {
-    return DistanceConvertor.metersToMiles(Geolocator.distanceBetween(
-        lat, lng, coordinates['latitude'], coordinates['longitude']));
+    final double meters = Geolocator.distanceBetween(
+        lat, lng, coordinates['latitude'], coordinates['longitude']);
+
+    return DistanceConvertor.metersToMiles(meters);
   }
 }

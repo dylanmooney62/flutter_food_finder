@@ -44,9 +44,10 @@ class MyApp extends StatelessWidget {
                 backgroundColor: Colors.white,
                 elevation: 0,
                 titleTextStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                    color: Colors.black)),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  color: Colors.black,
+                )),
             bottomNavigationBarTheme: const BottomNavigationBarThemeData(
                 showSelectedLabels: false,
                 showUnselectedLabels: false,
@@ -75,7 +76,13 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
-        children: const [HomeScreen(), MapScreen(), FavouritesScreen()],
+        children: [
+          const HomeScreen(),
+          MapScreen(
+            key: UniqueKey(),
+          ),
+          const FavouritesScreen()
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const [

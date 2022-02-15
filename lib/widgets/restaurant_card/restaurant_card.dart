@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_food_finder/models/restaurant.dart';
 import 'package:flutter_food_finder/providers/favourites_provider.dart';
+import 'package:flutter_food_finder/widgets/restaurant_card/favourite_button.dart';
+import 'package:flutter_food_finder/widgets/restaurant_card/rating.dart';
 import 'package:provider/provider.dart';
 
 class RestaurantCard extends StatelessWidget {
@@ -11,33 +13,16 @@ class RestaurantCard extends StatelessWidget {
   final Restaurant restaurant;
   final String distance;
 
-  Widget _buildFavouritesButton(BuildContext context) {
-    const double size = 36;
-
-    return Consumer<FavouritesProvider>(
-      builder: (context, favourites, child) {
-        bool isFavourite =
-            favourites.favourites.indexWhere((r) => r.id == restaurant.id) >= 0;
-
-        final Widget icon = isFavourite
-            ? const Icon(Icons.favorite, color: Colors.red, size: size)
-            : const Icon(Icons.favorite_outline,
-                color: Colors.white, size: size);
-
-        return IconButton(
-            onPressed: () => !isFavourite
-                ? favourites.add(restaurant)
-                : favourites.remove(restaurant),
-            icon: icon);
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final imageUrl = restaurant.imageUrl.isNotEmpty
         ? restaurant.imageUrl
         : "https://picsum.photos/id/163/400/300";
+
+    var favourites = context.watch<FavouritesProvider>();
+
+    bool isFavourite =
+        favourites.favourites.indexWhere((r) => r.id == restaurant.id) >= 0;
 
     return Container(
         clipBehavior: Clip.antiAlias,
@@ -70,7 +55,12 @@ class RestaurantCard extends StatelessWidget {
                         Positioned(
                             top: 0,
                             left: 0,
-                            child: _buildFavouritesButton(context)),
+                            child: FavouriteButton(
+                              isFavourite: isFavourite,
+                              onPressed: () => !isFavourite
+                                  ? favourites.addFavourite(restaurant)
+                                  : favourites.removeFavourite(restaurant),
+                            )),
                         Positioned(
                             top: 12,
                             right: 12,
@@ -84,7 +74,9 @@ class RestaurantCard extends StatelessWidget {
                               Text(
                                 "${distance}m",
                                 style: const TextStyle(
-                                    color: Colors.white, fontSize: 16),
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontFamily: 'Open-sans'),
                               )
                             ]))
                       ],
@@ -98,19 +90,24 @@ class RestaurantCard extends StatelessWidget {
                         Row(
                           children: [
                             Expanded(
-                              flex: 2,
+                              flex: 6,
                               child: Text(restaurant.name,
                                   style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Open-sans')),
                             ),
                             Expanded(
+                                flex: 4,
                                 child:
                                     Rating(rating: restaurant.rating.toInt()))
                           ],
                         ),
                         const SizedBox(height: 6),
-                        Text(restaurant.address)
+                        Text(
+                          restaurant.address,
+                          style: const TextStyle(fontFamily: 'Open-sans'),
+                        )
                       ],
                     ),
                   )
@@ -119,24 +116,5 @@ class RestaurantCard extends StatelessWidget {
             )
           ],
         ));
-  }
-}
-
-class Rating extends StatelessWidget {
-  const Rating({Key? key, required this.rating}) : super(key: key);
-
-  final int rating;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: List<int>.filled(rating, 0)
-            .map((e) => const Icon(
-                  Icons.star,
-                  color: Colors.amber,
-                ))
-            .toList());
   }
 }

@@ -10,19 +10,20 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  _onSearch(String address) {
-    if (address.isEmpty) {
-      context.read<LocationProvider>().useLocationFromGPS();
-    } else {
-      context.read<LocationProvider>().useLocationFromAddress(address);
-    }
+  _handleFieldSubmitted(String address) {
+    var location = context.read<LocationProvider>();
+
+    // If search is empty set location to GPS as default
+    address.isNotEmpty
+        ? location.setLocationAddress(address)
+        : location.setLocationGPS();
   }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       keyboardType: TextInputType.streetAddress,
-      onFieldSubmitted: (String address) => _onSearch(address),
+      onFieldSubmitted: _handleFieldSubmitted,
       decoration: const InputDecoration(
         border: UnderlineInputBorder(),
         labelText: 'Enter Location',
