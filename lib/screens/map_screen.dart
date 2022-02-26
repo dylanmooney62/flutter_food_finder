@@ -53,7 +53,7 @@ class _MapScreenState extends State<MapScreen> {
 
     return MapboxMap(
       styleString: MapboxStyles.MAPBOX_STREETS,
-      accessToken: dotenv.env['MAPBOX_ACCESS_TOKEN'],
+      accessToken: const String.fromEnvironment("MAPBOX_ACCESS_TOKEN"),
       onMapCreated: _onMapCreated,
       onStyleLoadedCallback: _addMarkers,
       initialCameraPosition: CameraPosition(
