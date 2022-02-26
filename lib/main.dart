@@ -7,12 +7,9 @@ import 'package:flutter_food_finder/screens/home_screen.dart';
 import 'package:flutter_food_finder/screens/map_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future main() async {
   // Load .env variables before running app
-  await dotenv.load();
-
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => FavouritesProvider()),
