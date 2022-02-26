@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_food_finder/providers/location_provider.dart';
 import 'package:flutter_food_finder/providers/restaurant_provider.dart';
 import 'package:provider/provider.dart';
