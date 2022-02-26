@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_food_finder/config/environment_config.dart';
 import 'package:flutter_food_finder/providers/location_provider.dart';
 import 'package:flutter_food_finder/providers/restaurant_provider.dart';
 import 'package:provider/provider.dart';
@@ -52,7 +53,7 @@ class _MapScreenState extends State<MapScreen> {
 
     return MapboxMap(
       styleString: MapboxStyles.MAPBOX_STREETS,
-      accessToken: const String.fromEnvironment("MAPBOX_ACCESS_TOKEN"),
+      accessToken: EnvironmentConfig.MAPBOX_ACCESS_TOKEN,
       onMapCreated: _onMapCreated,
       onStyleLoadedCallback: _addMarkers,
       initialCameraPosition: CameraPosition(

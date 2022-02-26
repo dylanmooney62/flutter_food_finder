@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_food_finder/config/environment_config.dart';
 import 'package:flutter_food_finder/models/restaurant.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart' as http;
@@ -6,7 +7,7 @@ import 'package:http/http.dart' as http;
 class Yelp {
   static const String _url = 'https://api.yelp.com/v3/businesses';
   static final Map<String, String> _headers = {
-    'authorization': 'Bearer ${const String.fromEnvironment("YELP_AUTH_TOKEN")}'
+    'authorization': 'Bearer ${EnvironmentConfig.YELP_AUTH_TOKEN}'
   };
 
   static Future<List<Restaurant>> getRestaurants(Location location) async {

@@ -31,8 +31,6 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
-
-
 android {
     compileSdkVersion flutter.compileSdkVersion
 
@@ -58,6 +56,8 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        resValue "string", "MAPBOX_ACCESS_TOKEN", "$System.env.MAPBOX_ACCESS_TOKEN"
+        resValue "string", "YELP_AUTH_TOKEN", "$System.env.YELP_AUTH_TOKEN"
     }
 
     signingConfigs {
