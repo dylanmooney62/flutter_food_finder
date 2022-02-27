@@ -66,10 +66,6 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        manifestPlaceholders += [
-            MAPBOX_ACCESS_TOKEN: dartEnvironmentVariables.MAPBOX_ACCESS_TOKEN,
-            YELP_AUTH_TOKEN: dartEnvironmentVariables.YELP_AUTH_TOKEN
-        ]
         resValue "string", "MAPBOX_ACCESS_TOKEN", dartEnvironmentVariables.MAPBOX_ACCESS_TOKEN
         resValue "string", "YELP_AUTH_TOKEN", dartEnvironmentVariables.YELP_AUTH_TOKEN
     }
