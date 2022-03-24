@@ -16,7 +16,7 @@ class Yelp {
       final double lng = location.longitude;
 
       Uri query = Uri.parse(
-          '$_url/search?term=food&latitude=$lat&longitude=$lng&limit=5');
+          '$_url/search?term=food&latitude=$lat&longitude=$lng&limit=15');
 
       var response = await http.get(query, headers: _headers);
 
