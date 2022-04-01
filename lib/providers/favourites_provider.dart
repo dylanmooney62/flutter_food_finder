@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_food_finder/models/restaurant.dart';
 import 'package:flutter_food_finder/services/yelp.dart';
@@ -15,15 +17,21 @@ class FavouritesProvider extends ChangeNotifier {
   getFavourites() async {
     final prefs = await SharedPreferences.getInstance();
 
-    // Retrieve id's of favourites
+    // Retrieve ids of favourites
     List<String> ids = (prefs.getStringList('favourites') ?? []);
 
     if (ids.isEmpty) return;
 
-    List<Restaurant> restaurants =
+    // Request restaurant data for each id
+    List<Restaurant?> restaurants =
         await Future.wait(ids.map((id) => Yelp.getRestaurantById(id)));
 
-    _favourites.addAll(restaurants);
+    // Filter out null values
+    restaurants.removeWhere((r) => r == null);
+
+    if (restaurants.isEmpty) return;
+
+    _favourites.addAll(List<Restaurant>.from(restaurants));
 
     notifyListeners();
   }

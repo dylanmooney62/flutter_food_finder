@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter_food_finder/config/environment_config.dart';
 import 'package:flutter_food_finder/models/restaurant.dart';
 import 'package:geocoding/geocoding.dart';
@@ -20,7 +21,17 @@ class Yelp {
 
       var response = await http.get(query, headers: _headers);
 
+      if (response.statusCode != 200) {
+        return Future.error(
+            "Unable to retrieve restaurant data. Please try again.");
+      }
+
       List<dynamic> jsonData = jsonDecode(response.body)['businesses'];
+
+      if (jsonData.isEmpty) {
+        return Future.error(
+            "No restaurants found. Please enter a different location");
+      }
 
       return jsonData.map((json) => Restaurant.fromJson(json)).toList();
     } catch (error) {
@@ -28,15 +39,15 @@ class Yelp {
     }
   }
 
-  static Future<Restaurant> getRestaurantById(String id) async {
-    try {
-      Uri query = Uri.parse('$_url/$id');
+  static Future<Restaurant?> getRestaurantById(String id) async {
+    Uri query = Uri.parse('$_url/$id');
 
-      var response = await http.get(query, headers: _headers);
+    var response = await http.get(query, headers: _headers);
 
-      return Restaurant.fromJson(jsonDecode(response.body));
-    } catch (error) {
-      return Future.error(error);
+    if (response.statusCode != 200) {
+      return null;
     }
+
+    return Restaurant.fromJson(jsonDecode(response.body));
   }
 }

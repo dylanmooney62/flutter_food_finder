@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_food_finder/services/location.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LocationProvider extends ChangeNotifier {
   Location? _location;
@@ -14,15 +15,17 @@ class LocationProvider extends ChangeNotifier {
 
   setLocationGPS() async {
     try {
-      Position location = await LocationService.getPosition();
+      Position position = await LocationService.getPosition();
 
       _location = Location(
-          latitude: location.latitude,
-          longitude: location.longitude,
+          latitude: position.latitude,
+          longitude: position.longitude,
           timestamp: DateTime.now());
 
       notifyListeners();
-    } catch (error) {}
+    } catch (error) {
+      _handleError(error.toString());
+    }
   }
 
   setLocationAddress(String address) async {
@@ -33,6 +36,17 @@ class LocationProvider extends ChangeNotifier {
       _location = locations[0];
 
       notifyListeners();
-    } catch (error) {}
+    } catch (error) {
+      _handleError(error.toString());
+    }
+  }
+
+  _handleError(String message) {
+    Fluttertoast.showToast(msg: message, toastLength: Toast.LENGTH_LONG);
+
+    _location = Location(
+        latitude: 51.509865, longitude: -0.118092, timestamp: DateTime.now());
+
+    notifyListeners();
   }
 }
