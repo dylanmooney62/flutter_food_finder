@@ -14,7 +14,9 @@ class RestaurantList extends StatelessWidget {
   Widget build(BuildContext context) {
     Location? location = context.watch<LocationProvider>().location;
 
-    if (location == null) return const CircularProgressIndicator();
+    if (location == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
     return ListView.builder(
         padding: const EdgeInsets.all(10),
